@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Gohan - Precedent Predictor</title>
+    <style>
+        table {
+            width: 800px;
+            border-spacing: 0px;
+            border-collapse: collapse;
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-top: 1px;
+            padding-bottom: 1px;
+            text-align: center;
+        }
+        th {
+            text-align: center;
+            background-color: blue;
+            color: lightgrey;
+        }
+        tr:nth-child(even) {
+            background-color: Lightblue;
+        }
+    </style>
+</head>
+
+<body>
+    <p style="font-family: Arial, Helvetica, sans-serif; font-size: large; text-align:center; width: 800px;">Precedent Predictor</p>
+    <div>
+        {{ df_html|safe }}
+    </div>
+<br><br>
+    <form action="{{url_for('second_page')}}" method="post" target="second_page_frame">
+        <table>
+            <tr>
+                <td style="background-color:white; text-align:left;">
+                    <label for="tgtselect">Please select a target:</label>
+                </td>
+                <td style="background-color:white; text-align:left;">
+                    <select name="tgtselect" placeholder="Select Target">
+                        <option disabled selected hidden>Select Target</option>
+                        <option value="decisionType">Decision Type</option>
+                        <option value="decisionDirection">Decision Direction</option>
+                        <option value="partyWinning">Winning Party</option>
+                        <option value="caseDisposition">Case Disposition</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color:white; text-align:left;">
+                    <label for="mdlselect">Please select a model:</label>
+                </td>
+                <td style="background-color:white; text-align:left;">
+                    <select name="mdlselect" placeholder="Select Model">
+                        <option disabled selected hidden>Select Model</option>
+                        <option value="1">K Nearest Neighbour</option>
+                        <option value="2">Logistic Regression</option>
+                        <option value="3">Random Forest Classifier</option>
+                        <option value="4">Decision Tree Classifier</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align:center; background-color:white;">
+                    <button type="submit">Submit</button>
+                </td> 
+            </tr>
+        </table>
+    </form>
+
+<iframe name="second_page_frame" style="width:810px; height: 260px; ;"></iframe>
+
+<iframe name="third_page_frame" style="width:810px; height: 70px; ;"></iframe>
+
+
+</body>
+
+</html>
