@@ -198,7 +198,7 @@ Table 1: Model Scores
 
 
 ### Phase 4: Using our Model(s) to Make Predictions
-Since we detemrmined that accurate training models was possible, we wanted to stretch ourselves and attempt to make predictions based on our trained data. To do this, we created a new predict_outcome function, that takes user inputs based on the features (X)  and made predictions based on the trained model. We also built a corresponding web application to facilitate using this application.
+Since we detemrmined that accurate training models was possible, we wanted to stretch ourselves and attempt to make predictions based on our trained data. To do this, we created a new predict_outcome function, that takes user inputs based on the features (X)  and made predictions based on the trained model. We also were able to use this code to assist with developing a GUI interface for future implementation on the web.
 
 
 ## Noteworthy Pain Points, Learning Experiences, and Opportunities for Further Research and Exploration
