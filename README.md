@@ -51,7 +51,7 @@ Washington University Law Case Database.csv: A copy of the original [Supreme Cou
 
 function_based_model.ipynb: The completed notebook containing all the code for Project 2
 
-webapp_python folder: we created an extension of our model and predictions which provides a GUI interface for future use on the web
+webapp_python folder: we created an extension of our model and predictions which provides a GUI interface prototype for future use on the web
 
 [Powerpoint Presentation](https://docs.google.com/presentation/d/1OPi3H7meqaaGZ5fLT1r_qsfQ5a681IWky1xjDdVXiGI/edit#slide=id.p1)
 
@@ -200,7 +200,7 @@ Table 1: Model Scores
 
 
 ### Phase 4: Using our Model(s) to Make Predictions
-Since we detemrmined that accurate training models was possible, we wanted to stretch ourselves and attempt to make predictions based on our trained data. To do this, we created a new predict_outcome function, that takes user inputs based on the features (X)  and made predictions based on the trained model. We also were able to use this code to assist with developing a GUI interface for future implementation on the web.
+Since we detemrmined that accurate training models was possible, we wanted to stretch ourselves and attempt to make predictions based on our trained data. To do this, we created a new predict_outcome function, that takes user inputs based on the features (X)  and made predictions based on the trained model. We also were able to use this code to assist with developing a GUI interface prototype for future implementation on the web.
 
 
 ## Noteworthy Pain Points, Learning Experiences, and Opportunities for Further Research and Exploration
