@@ -49,8 +49,9 @@ The following libraries and dependencies are required to run the project success
 
 Washington University Law Case Database.csv: A copy of the original [Supreme Court Database]9(https://docs.google.com/spreadsheets/d/1_ODNIn5n1k9RSVr_7gV2On4idZ6v0B2XPeMhCD18kio/pub?gid=1188863554&single=true&output=csv)
 
-
 function_based_model.ipynb: The completed notebook containing all the code for Project 2
+
+webapp_python folder: we created an extension of our model and predictions which provides a GUI interface for future use on the web
 
 [Powerpoint Presentation](https://docs.google.com/presentation/d/1OPi3H7meqaaGZ5fLT1r_qsfQ5a681IWky1xjDdVXiGI/edit#slide=id.p1)
 
