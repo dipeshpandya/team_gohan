@@ -3,7 +3,6 @@ import pandas as pd
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-#from sklearn.preprocessing import OneHotEncoder, LabelEncoder, StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC 
 from sklearn.neighbors import KNeighborsClassifier
@@ -14,7 +13,6 @@ from IPython.display import clear_output
 import numpy as np
 import time
 import matplotlib.pyplot as plt
-# from prophet import Prophet
 import seaborn as sns
 
 df=pd.read_csv('https://docs.google.com/spreadsheets/d/1_ODNIn5n1k9RSVr_7gV2On4idZ6v0B2XPeMhCD18kio/pub?gid=1188863554&single=true&output=csv')
@@ -23,12 +21,10 @@ select_array = np.array([])
 
 def run_model(target):
     dfwork = df[[
-    #"issueArea",
     "decisionDirection",
     "decisionType",
     "threeJudgeFdc",
     "certReason",
-    #"lcDisposition",
     "lcDispositionDirection",
     "partyWinning",
     "majVotes",
@@ -74,9 +70,7 @@ def knn(X, xt,y, yt, target):
     test_score = model.score(xt, yt)
     predictions = model.predict(xt)
     acc_score = accuracy_score(yt, predictions)
-    #display(f"{model_name} Train/Test Score for {target} column : {train_score:.3f}/{test_score:.3f}")
     update_score(target,model_name, function_name, train_score, test_score, acc_score)
-    #return knn_train_score, knn_test_score, target
     return model
 
 def lr(X, xt,y, yt, target):
@@ -92,18 +86,15 @@ def lr(X, xt,y, yt, target):
 
     # Validate the model by checking the model accuracy with model.score
 
-    #display(f"{model} Train/Test Score for {target} column : {lr_train_score:.3f}/{lr_test_score:.3f}")
     predictions = model.predict(xt)
     # Calculate the accuracy score
     acc_score = accuracy_score(yt, predictions)
-    #print(f"Accuracy Score : {acc_score}")
 
     update_score(target,model_name, function_name, train_score, test_score, acc_score)
     return model
 
 def rf(X, xt,y, yt, target):
-    #print(X.columns)
-    # Create the logistic regression classifier model with a random_state of 1
+    # Create the random forest classifier model with a random_state of 1
     rt_model = RandomForestClassifier(n_estimators=128, random_state=42)
     model_name = 'Random Forest'
     function_name = 'rf'
@@ -115,19 +106,15 @@ def rf(X, xt,y, yt, target):
 
     # Validate the model by checking the model accuracy with model.score
 
-    #display(f"{model} Train/Test Score for {target} column : {lr_train_score:.3f}/{lr_test_score:.3f}")
     predictions = rt_model.predict(xt)
     # Calculate the accuracy score
     acc_score = accuracy_score(yt, predictions)
-    #print(f"Accuracy Score : {acc_score}")
-    #trained_model = model
-    #print({trained_model})
     update_score(target,model_name, function_name, train_score, test_score, acc_score)
     return rt_model
 
 def dt(X, xt,y, yt, target):
     from sklearn import tree
-    # Create the logistic regression classifier model with a random_state of 1
+    # Create the decision tree classifier model with a random_state of 1
     model = tree.DecisionTreeClassifier()
     model_name = 'Decision Tree'
     function_name = 'dt'
@@ -139,11 +126,9 @@ def dt(X, xt,y, yt, target):
 
     # Validate the model by checking the model accuracy with model.score
 
-    #display(f"{model} Train/Test Score for {target} column : {lr_train_score:.3f}/{lr_test_score:.3f}")
     predictions = model.predict(xt)
     # Calculate the accuracy score
     acc_score = accuracy_score(yt, predictions)
-    #print(f"Accuracy Score : {acc_score}")
 
     update_score(target,model_name, function_name, train_score, test_score, acc_score)
     return model
@@ -151,62 +136,32 @@ def dt(X, xt,y, yt, target):
 def update_score(target, model, fn, trs, tss, acc):
     
     model_score.append({'target_column': target, 'model_name': model, 'function_name' : fn, 'training_score': trs, 'testing_score': tss, 'accuracy_score': acc})
-    #display(model_scores.head())
-    #return model_scores    
 
 def predict_outcome(trained_model, selection1, target):
-#    #prompts=pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTcUMWXktcB48qH6B77aGPX1XfrkbBc2_RxzJbmCdtDkUZa2m1orezx1pcrGdvfGytfNQL8L-_58SyP/pub?gid=0&single=true&output=csv")
-#    prompts = prompts.sort_values(by = ['features', 'selection'])
-#    prompts.reset_index(drop=True, inplace=True)
-#    prompts
-    #selection_prompts = prompts
-    #selection_df = pd.DataFrame(selection1)
-    #selection_df = selection_df.T
-    #selection_df.loc[0]
-    #predict(selection1)
-    #return selection1
     selection_df = pd.DataFrame(selection1)
     selection_df = selection_df.T
     selection_df.loc[0]
-    #print(selection_df)
-    #X_new1 = np.array([X_imputed2.iloc[13853].to_numpy().astype(int)])
     X_new1 = np.array([selection_df.iloc[0].to_numpy().astype(int)])
-    #print(X_new1)
 
     # Get prediction
-    #print(model)
-    #global trained_model
-    #prediction = trained_model.predict(X_new1)
     prediction = trained_model.predict(X_new1)
-
-    # prompts = prompts.sort_values(by = ['features', 'selection'])
-    # prompts.reset_index(drop=True, inplace=True)
 
     feature_name = prompts[(prompts['features'] == target) & (prompts['selection'] == round(prediction[0]))]['feature_name'].iloc[0]
     my_prediction = prompts[(prompts['features'] == target) & (prompts['selection'] == round(prediction[0]))]['value'].iloc[0]
 
     prediction_text = f"Based on my training and analysis of the inputs, I predict that outcome of {feature_name} will be : <b>{my_prediction}</b>"
 
-    #print(f"Based on the data, prediction for the {y.columns[0]} is {prediction[0][0].astype(int)}")
-    #print(f"Based on the data, prediction for the {y.columns[1]} is {prediction[0][1].astype(int)}")
-    #my_prediction = prompts[(prompts['features'] == y_imputed.columns[0]) & (prompts['selection'] == round(prediction[0][0],0))]['value']
-    # my_prediction = prompts[(prompts['features'] == target) & (prompts['selection'] == round(prediction[0]))]['value'].iloc[0]
-    # clear_output()
-    # print(f"I predict that {my_prediction}")
     return prediction_text
 
 prediction = None
 dfwork = df[[
-#"issueArea",
 "decisionDirection",
 "decisionType",
 "threeJudgeFdc",
 "certReason",
-#"lcDisposition",
 "lcDispositionDirection",
 "partyWinning",
 "majVotes",
-# "chief_term",
 "minVotes",
 "caseDisposition"
 ]]
@@ -214,9 +169,7 @@ dfwork = df[[
 chiefs = df['chief'].unique()
 x = 0
 for chief in chiefs:
-    #print(chief)
     df.loc[df['chief'] == chief, 'chief_term'] = x
-    #dfcoyp['chief_term'] = x
     x = x + 1
 
 df['dateDecision'] = pd.to_datetime(df['dateDecision'], errors='coerce')
@@ -278,6 +231,7 @@ cd_dropdown = """<td><label for='cd_select'>Please select a Case Disposition:</l
 <option value='10'>certification to or from a lower court</option>
 <option value='11'>no disposition</option>
 </select></td>"""
+
 pw_dropdown = """<td><label for='pw_select'>Please select a Winning Party:</label></td>
 <td><select name='pw_select' placeholder='Winning Party'>
 <option disabled selected hidden>Select Winning Party</option>
@@ -372,7 +326,6 @@ def second_page():
 
 @app.route("/predict2",  methods=['POST'])
 def third_page():
-
     
     select_array = np.array([])
     tgtselected = request.form['tgtselected']
@@ -440,7 +393,6 @@ def third_page():
     html_data = result
 
     return render_template("output2.html", html_data=Markup(html_data))
-
 
 if __name__ == "__main__":
     app.run(debug=True)
