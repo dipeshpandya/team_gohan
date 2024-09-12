@@ -3,7 +3,7 @@
 
 
 ## Our Team
-Team Gohan is composed of Dhurba Chakrabarti, Dipesh Pandya, and Alexis Wukich.
+Team Gohan is composed of Dhruba Chakrabarti, Dipesh Pandya, and Alexis Wukich.
 
 
 ## The Problem
