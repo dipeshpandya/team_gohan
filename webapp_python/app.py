@@ -15,10 +15,13 @@ import time
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# Read in dataset from csv
 df=pd.read_csv('https://docs.google.com/spreadsheets/d/1_ODNIn5n1k9RSVr_7gV2On4idZ6v0B2XPeMhCD18kio/pub?gid=1188863554&single=true&output=csv')
 
+# placeholder for selection array being used later
 select_array = np.array([])
 
+# creating functions for use in runnin models and predictions
 def run_model(target):
     dfwork = df[[
     "decisionDirection",
@@ -50,14 +53,14 @@ def run_model(target):
     X_train, X_test, y_train, y_test = train_test_split(X_imputed, y_imputed, random_state=42)
     return X_train, X_test, y_train, y_test, target
 
+#creating function to models using data returned by run_model function
 def models(X_train, X_test, y_train, y_test, target):
     knn(X_train, X_test, y_train, y_test, target)
     lr(X_train, X_test, y_train, y_test, target)
     rf(X_train, X_test, y_train, y_test, target)
     dt(X_train, X_test, y_train, y_test, target)
    
-    # Create the KNN model with 10 neighbors
-
+# Function for KNN model
 def knn(X, xt,y, yt, target):
     model = KNeighborsClassifier(n_neighbors=10)
     model_name = 'KNN'
@@ -73,6 +76,7 @@ def knn(X, xt,y, yt, target):
     update_score(target,model_name, function_name, train_score, test_score, acc_score)
     return model
 
+# Function for Logistic Regression model
 def lr(X, xt,y, yt, target):
     # Create the logistic regression classifier model with a random_state of 1
     model = LogisticRegression(max_iter=2000)
@@ -93,6 +97,7 @@ def lr(X, xt,y, yt, target):
     update_score(target,model_name, function_name, train_score, test_score, acc_score)
     return model
 
+# Function for Random Forest Classifier model
 def rf(X, xt,y, yt, target):
     # Create the random forest classifier model with a random_state of 1
     rt_model = RandomForestClassifier(n_estimators=128, random_state=42)
@@ -112,6 +117,7 @@ def rf(X, xt,y, yt, target):
     update_score(target,model_name, function_name, train_score, test_score, acc_score)
     return rt_model
 
+# Function for Decision Tree Classifier model
 def dt(X, xt,y, yt, target):
     from sklearn import tree
     # Create the decision tree classifier model with a random_state of 1
@@ -133,10 +139,12 @@ def dt(X, xt,y, yt, target):
     update_score(target,model_name, function_name, train_score, test_score, acc_score)
     return model
 
+# Function for appending accuracy scores into dataframe
 def update_score(target, model, fn, trs, tss, acc):
     
     model_score.append({'target_column': target, 'model_name': model, 'function_name' : fn, 'training_score': trs, 'testing_score': tss, 'accuracy_score': acc})
 
+# Function for predicting outcome from trained model
 def predict_outcome(trained_model, selection1, target):
     selection_df = pd.DataFrame(selection1)
     selection_df = selection_df.T
@@ -153,7 +161,10 @@ def predict_outcome(trained_model, selection1, target):
 
     return prediction_text
 
+# Initializing the prediction variable
 prediction = None
+
+# Initial creation of dataframe for analysis
 dfwork = df[[
 "decisionDirection",
 "decisionType",
@@ -187,15 +198,9 @@ model_scores = pd.DataFrame(model_score)
 
 trained_model = None
 
-# decisionType	1	opinion of the court (orally argued)	decision type
-# decisionType	2	per curiam (no oral argument)	decision type
-# decisionType	4	decrees	decision type
-# decisionType	5	equally divided vote	decision type
-# decisionType	6	per curiam (orally argued)	decision type
-# decisionType	7	judgment of the Court (orally argued)	decision type
-# decisionType	8	seriatim	decision type
+# Creating the variables holding information for each feature being displayed in dropdowns.
 
-
+# Dropdown for Decision Type
 dt_dropdown = """<td><label for='dt_select'>Please select a Decision Type:</label></td>
 <td><select name='dt_select' placeholder='Decision Type'>
 <option disabled selected hidden>Select Decision Type</option>
@@ -208,6 +213,7 @@ dt_dropdown = """<td><label for='dt_select'>Please select a Decision Type:</labe
 <option value='8'>seriatim</option>
 </select></td>"""
 
+# Dropdown for Decision Direction
 dd_dropdown = """<td><label for='dd_select'>Please select a Decision Direction:</label></td>
 <td><select name='dd_select' placeholder='Decision Direction'>
 <option disabled selected hidden>Select Decision Direction</option>
@@ -216,6 +222,7 @@ dd_dropdown = """<td><label for='dd_select'>Please select a Decision Direction:<
 <option value='3'>unspecifiable</option>
 </select></td>"""
 
+# Dropdown for Case Disposition
 cd_dropdown = """<td><label for='cd_select'>Please select a Case Disposition:</label></td>
 <td><select name='cd_select' placeholder='Case Disposition'>
 <option disabled selected hidden>Select Case Disposition</option>
@@ -232,6 +239,7 @@ cd_dropdown = """<td><label for='cd_select'>Please select a Case Disposition:</l
 <option value='11'>no disposition</option>
 </select></td>"""
 
+# Dropdown for Winning Party
 pw_dropdown = """<td><label for='pw_select'>Please select a Winning Party:</label></td>
 <td><select name='pw_select' placeholder='Winning Party'>
 <option disabled selected hidden>Select Winning Party</option>
@@ -240,6 +248,7 @@ pw_dropdown = """<td><label for='pw_select'>Please select a Winning Party:</labe
 <option value='2'>favorable disposition for petitioning party unclear</option>
 </select></td>"""
 
+# Dropdown for Three Judge Fiduciary
 tjf_dropdown = """<td><label for='tjf_select'>Please select a Three Judge Fiduciary:</label></td>
 <td><select name='tjf_select' placeholder='Three Judge Fiduciary'>
 <option disabled selected hidden>Select Three Judge Fiduciary</option>
@@ -247,6 +256,7 @@ tjf_dropdown = """<td><label for='tjf_select'>Please select a Three Judge Fiduci
 <option value='1'>3-judge district ct heard case</option>
 </select></td>"""
 
+# Dropdown for Cert Reason
 cr_dropdown = """<td><label for='cr_select'>Please select a Reason for granting cert:</label></td>
 <td><select name='cr_select' placeholder='Reason for granting cert'>
 <option disabled selected hidden>Select Reason for granting cert</option>
@@ -265,6 +275,7 @@ cr_dropdown = """<td><label for='cr_select'>Please select a Reason for granting 
 <option value='13'>other reason</option>
 </select></td>"""
 
+# Dropdown for Case Disposition
 ct_dropdown = """<td><label for='ct_select'>Please select a Chief Justice:</label></td>
 <td><select name='ct_select' placeholder='Chief Justice'>
 <option disabled selected hidden>Select Chief Justice</option>
@@ -275,6 +286,7 @@ ct_dropdown = """<td><label for='ct_select'>Please select a Chief Justice:</labe
 <option value='4'>Roberts</option>
 </select></td>"""
 
+# Dropdown for Lower Course Disposition Direction
 ldd_dropdown = """<td><label for='ldd_select'>Please select a Lower Course Disposition Direction	:</label></td>
 <td><select name='ldd_select' placeholder='Lower Course Disposition Direction'>
 <option disabled selected hidden>Select Lower Course Disposition Direction</option>
@@ -283,33 +295,45 @@ ldd_dropdown = """<td><label for='ldd_select'>Please select a Lower Course Dispo
 <option value='3'>unspecifiable</option>
 </select></td>"""
 
+# Creating variables holding the text boxes for entering Majority and Minority vote information
 majvotes = "<tr><td><label for='majVotes'>Enter number of majority votes:</label></td><td><input type=number name='majVotes'></td></tr>"
 minvotes = "<tr><td><label for='minVotes'>Enter number of minority votes:</label></td><td><input type=number name='minVotes'></td></tr>"
 
-finalrequest=[]
 
+# Reading in the prompts from csv file
 prompts=pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTcUMWXktcB48qH6B77aGPX1XfrkbBc2_RxzJbmCdtDkUZa2m1orezx1pcrGdvfGytfNQL8L-_58SyP/pub?gid=0&single=true&output=csv")
 prompts = prompts.sort_values(by = ['features', 'selection'])
 prompts.reset_index(drop=True, inplace=True)
-starting_with_0 = ['partyWinning','threeJudgeFdc']
-prompts_0 = prompts[prompts['features'].isin(starting_with_0)]
-prompts_1 = prompts[~prompts['features'].isin(starting_with_0)]
+# starting_with_0 = ['partyWinning','threeJudgeFdc']
+# prompts_0 = prompts[prompts['features'].isin(starting_with_0)]
+# prompts_1 = prompts[~prompts['features'].isin(starting_with_0)]
 
+
+# Initializing Flask application
 app = Flask(__name__)
 
+# Defining the index page
 @app.route("/")
 def app_input_page():
+    
+    # Displaying model scores dataframe on screen
     df_html = model_scores.to_html(index=False)
     return render_template("index.html", df_html=df_html)
 
-@app.route("/predict",  methods=['POST'])
+# Defining the  page
+@app.route("/featureselection",  methods=['POST'])
 def second_page():
+
+    # Initializing the HTML code with data to be displayed on screen
     html_data = "<tr style='display:none'><td>Target selected:</td><td><input type=text name=""tgtselected"" value='"+request.form['tgtselect']+"'/></td></tr><tr style='display:none'><td>Model selected:</td><td><input type=text name=""mdlselected"" value='"+request.form['mdlselect']+"'/></td></tr>"
 
+    # pulling the POST value from the form
     tgtselected = request.form['tgtselect']
 
+    # Initializing a blank variable for holding the information for relevant dropdowns
     dropdowndata=""
 
+    # Populating the dropdowndata variable with relevant dropdowns
     if tgtselected == "decisionType":
         dropdowndata="<tr>" + cd_dropdown + "</tr><tr>" + cr_dropdown + "</tr><tr>" + ct_dropdown + "</tr><tr>" + dd_dropdown+"</tr><tr>" + ldd_dropdown + "</tr><tr>" + pw_dropdown + "</tr><tr>" + tjf_dropdown
     
@@ -322,16 +346,20 @@ def second_page():
     elif tgtselected == "caseDisposition":
         dropdowndata="<tr>" + cr_dropdown + "</tr><tr>" + ct_dropdown + "</tr><tr>" + dd_dropdown + "</tr><tr>" + dt_dropdown+"</tr><tr>" + ldd_dropdown + "</tr><tr>" + pw_dropdown + "</tr><tr>" + tjf_dropdown
     
-    return render_template("output.html", html_data=Markup(html_data + dropdowndata + majvotes +  minvotes))
+    return render_template("featureselection.html", html_data=Markup(html_data + dropdowndata + majvotes +  minvotes))
 
-@app.route("/predict2",  methods=['POST'])
+@app.route("/prediction",  methods=['POST'])
 def third_page():
     
+    # Reinitializing selection array
     select_array = np.array([])
+
+    # Pulling in the target and models selected from the posted data
     tgtselected = request.form['tgtselected']
     mdlselected = request.form['mdlselected']
     trained_model = None
 
+    # Populating data selected from dropdowns into arrays in correct sequence depending on target selected
     if tgtselected == "decisionType":
         select_array = np.append(select_array,int(request.form["cd_select"])).astype(int)
         select_array = np.append(select_array,int(request.form["cr_select"])).astype(int)
@@ -376,8 +404,10 @@ def third_page():
         select_array = np.append(select_array,int(request.form["majVotes"])).astype(int)
         select_array = np.append(select_array,int(request.form["minVotes"])).astype(int)
 
+    # Reading in X_train, X_test, y_train, y_test and target from run_model function
     Xn, Xt, yn, yt, tgt = run_model(tgtselected)
 
+    # Training selected model with train, test and target data
     if mdlselected == "1":
         trained_model = knn(X_train, X_test, y_train, y_test, tgtselected)
     elif mdlselected == "2":
@@ -387,12 +417,13 @@ def third_page():
     elif mdlselected == "4":
         trained_model = dt(X_train, X_test, y_train, y_test, tgtselected)
     
-    trained_model = rf(Xn, Xt, yn, yt, tgt)
+    # Reading prediction from the predict_outcome function based on the trained_model, the selection array and target selected
     result = predict_outcome(trained_model, select_array, tgtselected)
-    # result = ""
+    
+    # Feeding result to HTML data
     html_data = result
 
-    return render_template("output2.html", html_data=Markup(html_data))
+    return render_template("prediction.html", html_data=Markup(html_data))
 
 if __name__ == "__main__":
     app.run(debug=True)
